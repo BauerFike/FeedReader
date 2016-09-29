@@ -42,7 +42,6 @@ class GetArticles extends Command
 		$feeds = Feed::all();
 		foreach ($feeds as $key => $feed) {
 			$this->info('Retrieving articles from: '.$feed->xmlUrl);
-			$this->info($feed->xmlUrl);
 			$curl = curl_init();
 			curl_setopt_array($curl, Array(
 			CURLOPT_URL            => $feed->xmlUrl,
@@ -55,32 +54,33 @@ class GetArticles extends Command
 		));
 		$data = curl_exec($curl);
 		if($data===false){
-			$this->info('Error: '.$feed->xmlUrl." unreachable.");
+			$this->info(' (!)Error: '.$feed->xmlUrl." unreachable.");
 			continue;
 		}
+		$this->info(' Reached: '.$feed->xmlUrl.".");
 		$httpCode = curl_getinfo($curl)["http_code"];
 		if($httpCode!=200){
-			$this->info('Error: '.$feed->xmlUrl." returning ".$httpCode.".");
+			$this->info(' (!)Error: '.$feed->xmlUrl." returning ".$httpCode.".");
 			continue;
 		}
-
+		$this->info(' Status code: 200');
 		curl_close($curl);
 		$xml = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
-		if(!isset($xml->channel->item)){
-			$this->info('Error: '.$feed->xmlUrl.". XML unreadable.");
+		if(!isset($xml->channel) || !isset($xml->channel->item)){
+			$this->info(' (!)Error: '.$feed->xmlUrl.". XML unreadable.");
 			continue;
 		}
+		$this->info(' XML readable.');
 		$items = $xml->channel->item;
 		foreach($items  as $item){
 				$html = $item->children('content', true)->encoded != "" ? (string)$item->children('content', true)->encoded : '';
 				$item = (array)$item;
-				$post_id = isset($item['guid']) ? explode("p=",$item['guid'])[1] : null;
-				if(sizeof(Article::where('post_id',$post_id)->first())>0){
-					$this->info('Article already exists: '.$item['title']);
+				if(sizeof(Article::where('guid',$item['guid'])->first())>0){
+					$this->info('  Article already exists: '.$item['title']);
 					continue;
 				}
 				$mysqldate = isset($item['pubDate'])?date( 'Y-m-d H:i', strtotime( $item['pubDate'] ) ):date('Y-m-d H:i');
-				$this->info('Adding article: '.$item['title']);
+				$this->info('  Adding article: '.$item['title']);
 				Article::create(
 						['title' => isset($item['title'])? $item['title'] : '' ,
 						'link' => isset($item['link'])? $item['link'] : ''  ,
@@ -91,7 +91,7 @@ class GetArticles extends Command
 						'content' => $html,
 						'comments' => '',
 						'creator' => '',
-						'post_id' => $post_id,
+						'post_id' => 0,
 						'guid' => isset($item['guid'])? $item['guid'] : '',
 						'feed_id' => $feed->id]
 				);
