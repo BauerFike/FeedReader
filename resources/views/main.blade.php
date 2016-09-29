@@ -15,6 +15,7 @@
 		<div class="container">
 			<ul class="nav navbar-nav">
 				<li><a href="/feeds">Feeds</a></li>
+				<li><a href="/articles">Articles</a></li>
 			</ul>
 		</div>
 	</nav>

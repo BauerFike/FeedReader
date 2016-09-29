@@ -18,3 +18,4 @@
 
 Route::get('/feeds','FeedController@index');
 Route::post('/feeds','FeedController@insert');
+Route::get('/articles','ArticleController@index');
