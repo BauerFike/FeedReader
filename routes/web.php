@@ -18,4 +18,5 @@
 
 Route::get('/feeds','FeedController@index');
 Route::post('/feeds','FeedController@insert');
+Route::delete('/feeds/{feed}','FeedController@delete');
 Route::get('/articles','ArticleController@index');

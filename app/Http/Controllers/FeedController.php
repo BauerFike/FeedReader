@@ -19,17 +19,20 @@ class FeedController extends Controller
         return view('feeds.feeds',['feeds'=>App\Feed::all()]);
     }
 
-		public function insert(Request $request,Feed $feed)
-		{
-			$this->validate($request,[
-					'name'=>'required|unique:feeds',
-					'xmlUrl'=>'required|unique:feeds|url',
-					'htmlUrl'=>'url',
-			]);
-			// if($validator->fails()){
-			// 	return redirect('/feeds')->withErrors($validator)->withInput();
-			// }
-			Feed::create($request->all());
-			return back();
-		}
+	public function insert(Request $request,Feed $feed)
+	{
+		$this->validate($request,[
+				'name'=>'required|unique:feeds',
+				'xmlUrl'=>'required|unique:feeds|url',
+				'htmlUrl'=>'url',
+		]);
+		Feed::create($request->all());
+		return back();
+	}
+
+    public function delete(Feed $feed)
+    {
+        $feed->delete();
+        return back();
+    }
 }

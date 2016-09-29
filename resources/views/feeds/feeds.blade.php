@@ -37,9 +37,6 @@
 						<button class="btn btn-primary" type="submit" name="submit">Submit</button>
 					</form>
 				</div>
-				<div class="panel-footer">
-
-				</div>
 			</div>
 		</div>
 		<div class="col-md-6">
@@ -54,7 +51,16 @@
 
 						<ul class="list-group">
 							@foreach ($feeds as $key => $feed)
-								<li class="list-group-item"><a href="{{$feed->htmlUrl}}">{{$feed->name}}</a></li>
+								<li class="list-group-item">
+									<a href="{{$feed->htmlUrl}}">{{$feed->name}}</a>
+									<form  action="{{url('feeds',$feed->id)}}" method="post" class="pull-right">
+										<button type="submit" class="btn btn-xs " >
+											Delete
+										</button>
+										{{csrf_field()}}
+										{{method_field('DELETE')}}
+									</form>
+								</li>
 							@endforeach
 						</ul>
 					@else
@@ -62,9 +68,6 @@
 							There are no feeds.
 						</div>
 					@endif
-				</div>
-				<div class="panel-footer">
-
 				</div>
 			</div>
 		</div>

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Feed;
 use App\Article;
+use App\Image;
 
 class GetArticles extends Command
 {
@@ -40,6 +41,10 @@ class GetArticles extends Command
 	public function handle()
 	{
 		$feeds = Feed::all();
+		if(count($feeds)==0){
+			$this->info('There are no rss feeds to import from.');
+			return;
+		}
 		foreach ($feeds as $key => $feed) {
 			$this->info('Retrieving articles from: '.$feed->xmlUrl);
 			$curl = curl_init();
@@ -71,6 +76,7 @@ class GetArticles extends Command
 			continue;
 		}
 		$this->info(' XML readable.');
+		$channel = (array)$xml->channel;
 		$items = $xml->channel->item;
 		foreach($items  as $item){
 				$html = $item->children('content', true)->encoded != "" ? (string)$item->children('content', true)->encoded : '';
@@ -79,9 +85,14 @@ class GetArticles extends Command
 					$this->info('  Article already exists: '.$item['title']);
 					continue;
 				}
-				$mysqldate = isset($item['pubDate'])?date( 'Y-m-d H:i', strtotime( $item['pubDate'] ) ):date('Y-m-d H:i');
+				$time = strtotime( $item['pubDate'] );
+				if(!$time){
+					$mysqldate = date( 'Y-m-d H:i' );
+				}else{
+					$mysqldate = isset($item['pubDate'])?date( 'Y-m-d H:i', strtotime( $item['pubDate'] ) ):date('Y-m-d H:i');
+				}
 				$this->info('  Adding article: '.$item['title']);
-				Article::create(
+				$newArticle = Article::create(
 						['title' => isset($item['title'])? $item['title'] : '' ,
 						'link' => isset($item['link'])? $item['link'] : ''  ,
 						'pub_date' => $mysqldate ,
@@ -95,55 +106,17 @@ class GetArticles extends Command
 						'guid' => isset($item['guid'])? $item['guid'] : '',
 						'feed_id' => $feed->id]
 				);
-
+				if(isset($channel['image']) && $channel['image']->url!=""){
+					$image = (array)$channel['image'];
+					Image::create([
+						'url' => isset($image['url'])? $image['url'] : ''  ,
+						'height' => isset($image['height'])? $image['height'] : ''  ,
+						'width' => isset($image['width'])? $image['width'] : ''  ,
+						'description' => isset($image['description'])? $image['description'] : ''  ,
+						'article_id' => isset($newArticle->id)? $newArticle->id : ''  ,
+					]);
+				}
+			}
 		}
 	}
-	// $feeds = Entry::all();
-	// foreach($feeds as $feed){
-	// 	$curl = curl_init();
-	// 	curl_setopt_array($curl, Array(
-	// 			CURLOPT_URL            => $feed->url,
-	// 			CURLOPT_USERAGENT      => 'spider',
-	// 			CURLOPT_TIMEOUT        => 120,
-	// 			CURLOPT_CONNECTTIMEOUT => 30,
-	// 			CURLOPT_RETURNTRANSFER => TRUE,
-	// 			CURLOPT_ENCODING       => 'UTF-8',
-	// 			CURLOPT_FOLLOWLOCATION => true
-	// 	));
-	// 	$data = curl_exec($curl);
-		// if($data===false){
-		// 	Db::table('lucacostanzi_rssreader_feeds')->where('id', $feed->id)->update(['status' => "Unreachable"]);
-		// 	continue;
-		// }
-		// $httpCode = curl_getinfo($curl)["http_code"];
-		// if($httpCode!=200){
-		// 		Db::table('lucacostanzi_rssreader_feeds')->where('id', $feed->id)->update(['status' => "Code: ".$httpCode]);
-		// }
-		//
-		// curl_close($curl);
-	// 	$xml = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
-	// 	if(!isset($xml->channel->item)){
-	// 			Db::table('lucacostanzi_rssreader_feeds')->where('id', $feed->id)->update(['status' => "Unreadable"]);
-	// 			continue;
-	// 	}else{
-	// 			$items = $xml->channel->item;
-	// 	}
-	// 	foreach($items  as $item){
-	// 			$html = $item->children('content', true)->encoded != "" ? (string)$item->children('content', true)->encoded : null;
-	// 			$item = (array)$item;
-	// 			$entry = Db::table('lucacostanzi_rssreader_entries')->where('title', $item['title'])->first();
-	//
-	// 			if(!empty($entry)){
-	// 					continue;
-	// 			}else{
-	// 				$mysqldate = isset($item['pubDate'])?date( 'Y-m-d H:i', strtotime( $item['pubDate'] ) ):date('Y-m-d H:i');
-	// 				$post_id = isset($item['guid']) ? explode("p=",$item['guid'])[1] : null;
-	// 				Db::table('lucacostanzi_rssreader_entries')->insert(
-	// 						['title' => isset($item['title'])? $item['title'] : null ,'link' => isset($item['link'])? $item['link'] : null  ,'pub_date' => $mysqldate ,'category' => isset($item['category'][0])? $item['category'][0] : null ,'guid' => isset($item['guid'])? $item['guid'] : null ,'description' => isset($item['description'])? $item['description'] : null, 'content' => $html, 'post_id' => isset($item['post-id'])? $item['post-id'] : $post_id,'guid' => isset($item['guid'])? $item['guid'] : null,'feed_id' => $feed->id]
-	// 				);
-	// 			}
-	//
-	// 	}
-	// }
-}
 }

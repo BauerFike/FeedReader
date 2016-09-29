@@ -25,4 +25,9 @@ class Article extends Model
 	{
 		return $this->belongsTo('App\Feed');
 	}
+
+	public function Image()
+	{
+		return $this->hasOne('App\Image');
+	}
 }

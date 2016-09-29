@@ -7,3 +7,20 @@
 
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+.article-title{
+    font-size: 27px;
+    font-weight: bold;
+    color: black;
+}
+
+.metadata{
+    font-style: italic;
+}
+
+article img{
+    width: 50% !important;
+    margin: auto;
+    height: auto !important;
+    display: block;
+}

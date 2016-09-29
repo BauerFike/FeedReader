@@ -10,11 +10,13 @@ use App\Article;
 
 use App\Feed;
 
+use App\Image;
+
 class ArticleController extends Controller
 {
     public function index()
     {
-			$articles = Article::with('Feed')->orderBy('pub_date','desc')->limit(10)->get();
+			$articles = Article::with('Feed','Image')->orderBy('pub_date','desc')->limit(10)->get();
     	return view('feeds.articles',['articles'=>$articles]);
     }
 }
