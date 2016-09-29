@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
+use DOMDocument;
 use Illuminate\Console\Command;
 use App\Feed;
 use App\Article;
-use App\Image;
 
 class GetArticles extends Command
 {
@@ -80,6 +80,22 @@ class GetArticles extends Command
 		$items = $xml->channel->item;
 		foreach($items  as $item){
 				$html = $item->children('content', true)->encoded != "" ? (string)$item->children('content', true)->encoded : '';
+				$image = "";
+				$doc = new DOMDocument();
+			    @$doc->loadHTML($html);
+			    $tags = $doc->getElementsByTagName('img');
+				$image_list = "";
+				if($tags->length!=0){
+					$image_list = $tags[0]->getAttribute('src');
+				}
+				if(isset($item->enclosure[0])&&isset($item->enclosure[0]['type'])){
+					if(strpos($item->enclosure[0]['type'],'image')!==false){
+						$image = $item->enclosure[0]['url'];
+					}
+				}
+				if($image_list == ""){
+					$image_list = $image;
+				}
 				$item = (array)$item;
 				if(sizeof(Article::where('guid',$item['guid'])->first())>0){
 					$this->info('  Article already exists: '.$item['title']);
@@ -101,21 +117,24 @@ class GetArticles extends Command
 						'description' => isset($item['description'])? $item['description'] : '',
 						'content' => $html,
 						'comments' => '',
+						'image' => $image,
+						'image_list' => $image_list,
 						'creator' => '',
 						'post_id' => 0,
 						'guid' => isset($item['guid'])? $item['guid'] : '',
 						'feed_id' => $feed->id]
 				);
-				if(isset($channel['image']) && $channel['image']->url!=""){
-					$image = (array)$channel['image'];
-					Image::create([
-						'url' => isset($image['url'])? $image['url'] : ''  ,
-						'height' => isset($image['height'])? $image['height'] : ''  ,
-						'width' => isset($image['width'])? $image['width'] : ''  ,
-						'description' => isset($image['description'])? $image['description'] : ''  ,
-						'article_id' => isset($newArticle->id)? $newArticle->id : ''  ,
-					]);
-				}
+				// $image = $item->children('content', true)->encoded != "" ? (string)$item->children('content', true)->encoded : '';
+				// if(isset($channel['image']) && $channel['image']->url!=""){
+				// 	$image = (array)$channel['image'];
+				// 	Image::create([
+				// 		'url' => isset($image['url'])? $image['url'] : ''  ,
+				// 		'height' => isset($image['height'])? $image['height'] : ''  ,
+				// 		'width' => isset($image['width'])? $image['width'] : ''  ,
+				// 		'description' => isset($image['description'])? $image['description'] : ''  ,
+				// 		'article_id' => isset($newArticle->id)? $newArticle->id : ''  ,
+				// 	]);
+				// }
 			}
 		}
 	}

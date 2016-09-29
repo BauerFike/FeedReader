@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Article;
-use App\Image;
 
 class DropArticles extends Command
 {
@@ -41,7 +40,6 @@ class DropArticles extends Command
     {
         if ($this->confirm('Do you wish to delete all articles? [y|N]')) {
             Article::truncate();
-            Image::truncate();
         }
     }
 }
