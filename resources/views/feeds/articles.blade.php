@@ -7,17 +7,17 @@
 			<div class="panel-body article-panel">
 				<div class="article-panel-content">
 					<div class="article-title ">
-						{{$article->title}}
+						<a href="{{$article->link}}">{{$article->title}}</a>
 					</div>
 					<div class="metadata">
-						{{$article->feed->name}} / <small class="">{{date("d-m-Y H:i",strtotime($article->pub_date))}}</small>
+						<a href="{{$article->feed->htmlUrl}}">{{$article->feed->name}}</a> / <small class="">{{date("d-m-Y H:i",strtotime($article->pub_date))}}</small>
 					</div>
 					<article class="">
 						@if ($article->image!="")
 							<img src="{{$article->image}}" alt="" />
 						@endif
 
-						@if (isset($article->content))
+						@if ($article->content!="")
 							{!!$article->content!!}
 						@else
 							{!!$article->description!!}
@@ -28,5 +28,22 @@
 		</div>
 
 	@endforeach
-
+	<nav aria-label="...">
+		<ul class="pager">
+			@if ($page<$npages)
+				<li>
+					<a href="{{url('articles',$page+1)}}">
+						<span aria-hidden="true">&larr;</span>Older
+					</a>
+				</li>
+			@endif
+			@if ($page>0)
+				<li>
+					<a href="{{url('articles',$page-1)}}">
+						Newer<span aria-hidden="true">&rarr;</span>
+					</a>
+				</li>
+			@endif
+		</ul>
+	</nav>
 @endsection
