@@ -16,7 +16,7 @@ class FeedController extends Controller
 {
     public function index()
     {
-        return view('feeds.feeds',['feeds'=>App\Feed::all()]);
+        return view('feeds.list',['feeds'=>App\Feed::with('category')->get()]);
     }
 
 	public function insert(Request $request,Feed $feed)
@@ -27,7 +27,23 @@ class FeedController extends Controller
 				'htmlUrl'=>'url',
 		]);
 		Feed::create($request->all());
-		return back();
+		return redirect('/feeds');
+	}
+
+	public function edit(Feed $feed)
+	{
+		return view("feeds.edit",['feed'=>$feed]);
+	}
+
+	public function update(Request $request,Feed $feed)
+	{
+		$this->validate($request,[
+				'name'=>'required|unique:feeds,name,'.$feed->id,
+				'xmlUrl'=>'required|unique:feeds,xmlUrl,'.$feed->id.'|url',
+				'htmlUrl'=>'url',
+		]);
+		$feed->update($request->all());
+		return redirect('/feeds');
 	}
 
     public function delete(Feed $feed)

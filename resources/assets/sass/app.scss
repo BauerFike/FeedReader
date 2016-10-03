@@ -8,10 +8,11 @@
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
+
 .article-panel{
     font-family: "Slab Serif",sans-serif;
     line-height: 1.75em;
-    color: #333333;
+    // color: #333333;
     padding-bottom: 30px;
 }
 
@@ -35,25 +36,51 @@
 
 .metadata{
     font-style: italic;
-    color:#9e9e9e;
+    // color:#9e9e9e;
     padding-bottom: 20px;
 }
 
 
 .article-panel-content{
-    width: 560px;
+    // width: 560px;
     margin: auto;
+}
+
+article * {
+	max-width: 100% !important;
+}
+
+article::first-letter {
+    color: #5490b8;
+    float: left;
+    font-family: "Libre Baskerville",serif;
+    font-size: 5.882em;
+    line-height: 85px;
+    margin-bottom: -5px;
+    margin-right: 6px;
+    margin-top: 7px;
 }
 
 article img{
     border-radius: 3px;
     display: block;
-    max-width: 100% !important;
+    max-width: 80% !important;
     margin: auto;
     margin-bottom: 20px;
     margin-top: 20px;
+    // margin-right: 20px;
     height: auto !important;
     border: 1px solid #efefef;
+		// float:left;
+}
+article iframe{
+	border-radius: 3px;
+	display: block;
+	max-width: 80% !important;
+	margin: auto;
+	margin-bottom: 20px;
+	margin-top: 20px;
+	border: 1px solid #efefef;
 }
 
 .container{

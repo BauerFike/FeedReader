@@ -8,15 +8,7 @@
 	<link rel="stylesheet" href="/css/app.css" media="screen" title="no title">
 </head>
 <body>
-
-	<nav class="navbar navbar-default navbar-static-top" role="navigation">
-		<div class="container">
-			<ul class="nav navbar-nav">
-				<li><a href="/feeds">Feeds</a></li>
-				<li><a href="/articles">Articles</a></li>
-			</ul>
-		</div>
-	</nav>
+	@include('components.navbar')
 	<div class="container">
 		<div class="content">
 			@yield('content')

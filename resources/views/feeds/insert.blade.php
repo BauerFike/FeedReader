@@ -37,32 +37,7 @@
 						<button class="btn btn-primary" type="submit" name="submit">Submit</button>
 					</form>
 				</div>
-				<div class="panel-body">
-
-					@if (count($feeds)>0)
-
-						<ul class="list-group">
-							@foreach ($feeds as $key => $feed)
-								<li class="list-group-item">
-									<a href="{{$feed->htmlUrl}}">{{$feed->name}}</a>
-									<form  action="{{url('feeds',$feed->id)}}" method="post" class="pull-right">
-										<button type="submit" class="btn btn-xs " >
-											Delete
-										</button>
-										{{csrf_field()}}
-										{{method_field('DELETE')}}
-									</form>
-								</li>
-							@endforeach
-						</ul>
-					@else
-						<div class="alert-info">
-							There are no feeds.
-						</div>
-					@endif
-				</div>
 			</div>
 		</div>
-
 	</div>
 @endsection
