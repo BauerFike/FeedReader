@@ -15,9 +15,10 @@
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Categories<b class="caret"></b></a>
 				<ul class="dropdown-menu">
 					<li><a href="{{url('categories')}}">List</a></li>
+					<li><a href="{{url('categories/create')}}">Insert</a></li>
 					<li role="presentation" class="divider"></li>
 					@foreach ($categories as $cat)
-						<li><a href="{{url('articles',$cat->id)}}">{{$cat->name}}</a></li>
+						<li><a href="{{url('articles/category',$cat->name)}}">{{$cat->name}}</a></li>
 					@endforeach
 				</ul>
 			</li>

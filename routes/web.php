@@ -32,5 +32,5 @@ Route::delete('/categories/{category}','CategoryController@delete');
 
 
 Route::get('/','ArticleController@index');
-Route::get('/articles/{feed}','ArticleController@feeds');
 Route::get('/articles/category/{category}','ArticleController@categories');
+Route::get('/articles/{feed}','ArticleController@feeds');

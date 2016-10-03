@@ -12,4 +12,9 @@ class Category extends Model
 	{
 		return $this->hasMany('App\Feed');
 	}
+
+	public function Articles()
+	{
+		return $this->hasManyThrough('App\Article','App\Feed');
+	}
 }

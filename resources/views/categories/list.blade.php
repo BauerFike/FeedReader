@@ -1,14 +1,10 @@
 @extends('main')
 
 @section('content')
-	@if (count($categories)==0)
-		<div class="alert alert-warning">There are no categories.</div>
-	@endif
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<a href="/categories/create" class="btn btn-primary pull-right">New category</a>
 		</div>
-	</div>
 	<div class="panel-body">
 		@if (count($categories)>0)
 			<ul class="list-group">
@@ -26,7 +22,7 @@
 				@endforeach
 			</ul>
 		@else
-			<div class="alert-info">
+			<div class="alert alert-info">
 				There are no categories.
 			</div>
 		@endif

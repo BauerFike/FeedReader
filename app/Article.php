@@ -28,4 +28,13 @@ class Article extends Model
 		return $this->belongsTo('App\Feed');
 	}
 
+	public function Category()
+    {
+		// return $this->belongsTo('App\Category');
+		// return $this->belongsTo('App\Feed')->getResults()->category();
+		$feed = $this->belongsTo('App\Feed','feed_id');
+		return $feed->getResults()->hasMany('App\Category','category_id');
+        // return $this->belongsToThrough('App\Feed', 'App\Category');
+    }
+
 }
