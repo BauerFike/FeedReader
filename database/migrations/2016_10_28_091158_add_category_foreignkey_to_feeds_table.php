@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddCategoryIdToFeedsTable extends Migration
+class AddCategoryForeignkeyToFeedsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class AddCategoryIdToFeedsTable extends Migration
      */
     public function up()
     {
-        Schema::table('feeds', function ($table) {
-            $table->integer('category_id')->default(1);
+        Schema::table('feeds', function (Blueprint $table) {
+            $table->foreign('category_id')->references('id')->on('categories');
         });
+        \Illuminate\Support\Facades\Artisan::call('db:seed');
     }
 
     /**
@@ -25,8 +26,8 @@ class AddCategoryIdToFeedsTable extends Migration
      */
     public function down()
     {
-        Schema::table('feeds', function ($table) {
-            $table->dropColumn('category_id');
+        Schema::table('feeds', function (Blueprint $table) {
+            $table->dropForeign('feeds_category_id_foreign');
         });
     }
 }

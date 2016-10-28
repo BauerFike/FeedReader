@@ -9,7 +9,7 @@
 </head>
 <body>
 	@include('components.navbar')
-	<div class="container">
+	<div class="container bodycontent">
 		<div class="content">
 			@yield('content')
 		</div>
@@ -17,16 +17,19 @@
 	<script src="/js/app.js" charset="utf-8"></script>
 	<script type="text/javascript">
 	jQuery(document).ready(function() {
-		var page = 0;
+		var page = 2;
+		var loading = false;
+
 		$(window).scroll(function () {
-			if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
+			if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10 && !loading) {
+				loading = true;
 				$.ajax({
-					url: '/articles/category/Science?ajax=1page='+page,
+					url: window.location.pathname+'?ajax=1&page='+page,
 					dataType: 'html',
 					// 	data: {param1: 'value1'}
 				})
 				.done(function(data) {
-					console.log("success");
+					loading = false;
 					page+=1;
 					$('.content').append(data);
 				});
@@ -39,7 +42,18 @@
 
 			}
 		});
+		// $('body').keydown(function(e) {
+		//     if (e.keycode === 74) {
+		//         $(this)[0].scrollTop += 20;
+		// 		$('html,body').animate({ scrollTop:$(this).parent().next().offset().top}, 'slow');});
+		//     }
+		//     else if (e.keycode === 75) {
+		//         // how to scroll up?
+		//         $(this)[0].scrollTop -= 20;
+		//     }
+		// }
 	});
+
 	</script>
 </body>
 </html>

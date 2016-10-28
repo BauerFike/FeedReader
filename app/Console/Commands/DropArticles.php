@@ -24,8 +24,6 @@ class DropArticles extends Command
 
     /**
      * Create a new command instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -39,18 +37,18 @@ class DropArticles extends Command
      */
     public function handle()
     {
-				$feedId = $this->argument('feed');
-				if($feedId == null){
-					if ($this->confirm('Do you wish to delete all articles? [y|N]')) {
-						Article::truncate();
-						$this->info('Articles deleted.');
-					}
-				}else{
-					$feed = Feed::find($feedId);
-					if ($this->confirm('Do you wish to delete all articles for feed "'.$feed->name.'"? [y|N]')) {
-						Article::where('feed_id',$feedId)->delete();
-						$this->info('Articles deleted.');
-					}
-				}
+        $feedId = $this->argument('feed');
+        if ($feedId == null) {
+            if ($this->confirm('Do you wish to delete all articles? [y|N]')) {
+                Article::truncate();
+                $this->info('Articles deleted.');
+            }
+        } else {
+            $feed = Feed::find($feedId);
+            if ($this->confirm('Do you wish to delete all articles for feed "' . $feed->name . '"? [y|N]')) {
+                Article::where('feed_id', $feedId)->delete();
+                $this->info('Articles deleted.');
+            }
+        }
     }
 }

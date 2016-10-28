@@ -14,8 +14,8 @@ class AddImageToArticles extends Migration
     public function up()
     {
         Schema::table('articles', function ($table) {
-            $table->string('image',255);
-            $table->string('image_list',255);
+            $table->string('image', 255);
+            $table->string('image_list', 255);
         });
     }
 

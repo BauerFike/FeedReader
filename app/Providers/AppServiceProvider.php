@@ -19,8 +19,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::share('feeds', Feed::all());
-        View::share('categories', Category::all());
+//        View::share('feeds', Feed::all());
+//        View::share('categories', Category::all());
     }
 
     /**
@@ -30,6 +30,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
     }
 }

@@ -1,5 +1,5 @@
 
-@extends($isScrolling ? 'ajax' : 'main')
+@extends(isset($isScrolling) && $isScrolling ? 'ajax' : 'main')
 
 @section('content')
 	@if (count($articles)==0)

@@ -4,17 +4,23 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property mixed id
+ */
 class Feed extends Model
 {
-    protected $fillable = ['name','xmlUrl','htmlUrl','category_id'];
+    protected $fillable = ['name', 'xmlUrl', 'htmlUrl', 'category_id'];
 
-		public function Article()
-		{
-			return $this->hasMany('App\Article');
-		}
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function article()
+    {
+        return $this->hasMany('App\Article');
+    }
 
-		public function Category()
-		{
-			return $this->belongsTo('App\Category');
-		}
+    public function Category()
+    {
+        return $this->belongsTo('App\Category');
+    }
 }

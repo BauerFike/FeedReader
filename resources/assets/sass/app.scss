@@ -1,6 +1,7 @@
 
 // Fonts
 @import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+@import url(https://fonts.googleapis.com/css?family=Suez+One);
 
 // Variables
 @import "variables";
@@ -8,6 +9,15 @@
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
+body{
+
+    font-family: 'Raleway', serif;
+}
+
+.navbar-brand{
+    font-size: 23px;
+    margin-left: 0 !important;
+}
 
 .article-panel{
     font-family: "Slab Serif",sans-serif;
@@ -89,4 +99,8 @@ article iframe{
 
 .feedflare{
     display: none;
+}
+
+.bodycontent{
+    margin-top: 50px;
 }
