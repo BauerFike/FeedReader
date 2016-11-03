@@ -14,8 +14,13 @@ require('./bootstrap');
  */
 import Vue from 'vue';
 
-Vue.component('example', require('./components/Example.vue'));
+
+
+// Vue.component('example', require('./components/Example.vue'));
+Vue.component('myarticle', require('./components/Myarticle.vue'));
+
 
 const app = new Vue({
-    el: 'body'
+    el: '#app',
+    // render: h => h('myarticle')
 });

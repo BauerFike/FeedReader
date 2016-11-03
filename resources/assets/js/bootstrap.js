@@ -19,6 +19,9 @@ require('bootstrap-sass');
 window.Vue = require('vue');
 require('vue-resource');
 
+// var infiniteScroll =  require('vue-infinite-scroll');
+// Vue.use(infiniteScroll)
+
 /**
  * We'll register a HTTP interceptor to attach the "CSRF" header to each of
  * the outgoing requests issued by this application. The CSRF middleware
@@ -30,6 +33,7 @@ Vue.http.interceptors.push((request, next) => {
 
     next();
 });
+
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

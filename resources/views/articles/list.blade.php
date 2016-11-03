@@ -31,3 +31,7 @@
 	@endforeach
 	{{-- {{$articles->appends(Request::except('page'))->links()}} --}}
 @endsection
+
+@section('scripts')
+	<script src="/js/list_articles.js" charset="utf-8"></script>
+@endsection
